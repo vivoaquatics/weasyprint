@@ -7,19 +7,22 @@ class PDFKit
       @verbose         = false
       @meta_tag_prefix = 'pdfkit-'
       @default_options = {
-        :disable_smart_shrinking => false,
-        :quiet => true,
-        :page_size => 'Letter',
-        :margin_top => '0.75in',
-        :margin_right => '0.75in',
-        :margin_bottom => '0.75in',
-        :margin_left => '0.75in',
-        :encoding => 'UTF-8'
+        encoding: 'UTF-8',
+        format: 'pdf'
       }
+      # @default_options = {
+      #   :disable_smart_shrinking => false,
+      #   :quiet => true,
+      #   :page_size => 'Letter',
+      #   :margin_top => '0.75in',
+      #   :margin_right => '0.75in',
+      #   :margin_bottom => '0.75in',
+      #   :margin_left => '0.75in',
+      # }
     end
 
     def wkhtmltopdf
-      @wkhtmltopdf ||= (defined?(Bundler::GemfileError) ? `bundle exec which wkhtmltopdf` : `which wkhtmltopdf`).chomp
+      @wkhtmltopdf ||= (defined?(Bundler::GemfileError) ? `bundle exec which weasyprint` : `which weasyprint`).chomp
     end
 
     def quiet?

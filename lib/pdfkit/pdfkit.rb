@@ -25,8 +25,6 @@ class PDFKit
     @stylesheets = []
 
     @options = PDFKit.configuration.default_options.merge(options)
-    @options.delete(:quiet) if PDFKit.configuration.verbose?
-    @options.merge! find_options_in_meta(url_file_or_html) unless source.url?
     @options = normalize_options(@options)
 
     raise NoExecutableError.new unless File.exists?(PDFKit.configuration.wkhtmltopdf)
@@ -44,7 +42,7 @@ class PDFKit
 
     args << (path || '-') # Write to file or stdout
 
-    args.shelljoin
+    args.shelljoin.tap { |comm| puts ">>> " + comm }
   end
 
   def executable
@@ -84,29 +82,6 @@ class PDFKit
     # Pulled from:
     # https://github.com/wkhtmltopdf/wkhtmltopdf/blob/ebf9b6cfc4c58a31349fb94c568b254fac37b3d3/README_WKHTMLTOIMAGE#L27
     REPEATABLE_OPTIONS = %w[--allow --cookie --custom-header --post --post-file --run-script]
-
-    def find_options_in_meta(content)
-      # Read file if content is a File
-      content = content.read if content.is_a?(File)
-
-      found = {}
-      content.scan(/<meta [^>]*>/) do |meta|
-        if meta.match(/name=["']#{PDFKit.configuration.meta_tag_prefix}/)
-          name = meta.scan(/name=["']#{PDFKit.configuration.meta_tag_prefix}([^"']*)/)[0][0].split
-          found[name] = meta.scan(/content=["']([^"'\\]+)["']/)[0][0]
-        end
-      end
-
-      tuple_keys = found.keys.select { |k| k.is_a? Array }
-      tuple_keys.each do |key|
-        value = found.delete key
-        new_key = key.shift
-        found[new_key] ||= {}
-        found[new_key][key] = value
-      end
-
-      found
-    end
 
     def style_tag_for(stylesheet)
       "<style>#{File.read(stylesheet)}</style>"
@@ -175,20 +150,7 @@ class PDFKit
     end
 
     def successful?(status)
-      return true if status.success?
-
-      # Some of the codes: https://code.google.com/p/wkhtmltopdf/issues/detail?id=1088
-      # returned when assets are missing (404): https://code.google.com/p/wkhtmltopdf/issues/detail?id=548
-      return true if status.exitstatus == 2 && error_handling?
-
-      false
-    end
-
-    def error_handling?
-      @options.key?('--ignore-load-errors') ||
-        # wkhtmltopdf v0.10.0 beta4 replaces ignore-load-errors with load-error-handling
-        # https://code.google.com/p/wkhtmltopdf/issues/detail?id=55
-        %w(skip ignore).include?(@options['--load-error-handling'])
+      status.success?
     end
 
 end
