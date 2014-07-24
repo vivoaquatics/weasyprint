@@ -1,18 +1,18 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "pdfkit/version"
+require "weasyprint/version"
 
 Gem::Specification.new do |s|
-  s.name        = "pdfkit"
-  s.version     = PDFKit::VERSION
+  s.name        = "weasyprint"
+  s.version     = WeasyPrint::VERSION
   s.platform    = Gem::Platform::RUBY
-  s.authors     = ["Jared Pace", "Relevance"]
-  s.email       = ["jared@codewordstudios.com"]
-  s.homepage    = "https://github.com/pdfkit/pdfkit"
+  s.authors     = ["Jared Pace", "Relevance", "Simply Business"]
+  s.email       = ["jared@codewordstudios.com", "lukas.oberhuber@simplybusiness.co.uk"]
+  s.homepage    = "https://github.com/simplybusiness/weasyprint"
   s.summary     = "HTML+CSS -> PDF"
-  s.description = "Uses wkhtmltopdf to create PDFs using HTML"
+  s.description = "Uses weasyprint to create PDFs using HTML"
 
-  s.rubyforge_project = "pdfkit"
+  # s.rubyforge_project = "weasyprint"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")

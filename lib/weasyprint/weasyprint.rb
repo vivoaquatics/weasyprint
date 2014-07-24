@@ -1,11 +1,11 @@
 require 'shellwords'
 
-class PDFKit
+class WeasyPrint
 
   class NoExecutableError < StandardError
     def initialize
-      msg  = "No wkhtmltopdf executable found at #{PDFKit.configuration.wkhtmltopdf}\n"
-      msg << ">> Please install wkhtmltopdf - https://github.com/pdfkit/PDFKit/wiki/Installing-WKHTMLTOPDF"
+      msg  = "No wkhtmltopdf executable found at #{WeasyPrint.configuration.wkhtmltopdf}\n"
+      msg << ">> Please install wkhtmltopdf - https://github.com/weasyprint/WeasyPrint/wiki/Installing-WKHTMLTOPDF"
       super(msg)
     end
   end
@@ -24,10 +24,10 @@ class PDFKit
 
     @stylesheets = []
 
-    @options = PDFKit.configuration.default_options.merge(options)
+    @options = WeasyPrint.configuration.default_options.merge(options)
     @options = normalize_options(@options)
 
-    raise NoExecutableError.new unless File.exists?(PDFKit.configuration.wkhtmltopdf)
+    raise NoExecutableError.new unless File.exists?(WeasyPrint.configuration.wkhtmltopdf)
   end
 
   def command(path = nil)
@@ -46,7 +46,7 @@ class PDFKit
   end
 
   def executable
-    default = PDFKit.configuration.wkhtmltopdf
+    default = WeasyPrint.configuration.wkhtmltopdf
     return default if default !~ /^\// # its not a path, so nothing we can do
     if File.exist?(default)
       default

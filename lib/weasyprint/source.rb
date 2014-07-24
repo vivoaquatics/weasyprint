@@ -1,4 +1,4 @@
-class PDFKit
+class WeasyPrint
   class Source
     def initialize(url_file_or_html)
       @source = url_file_or_html

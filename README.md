@@ -1,18 +1,18 @@
-# PDFKit
+# WeasyPrint
 
 Create PDFs using plain old HTML+CSS. Uses [wkhtmltopdf](http://github.com/antialize/wkhtmltopdf) on the back-end which renders HTML using Webkit.
 
 ## Install
 
-### PDFKit
+### WeasyPrint
 ```
-gem install pdfkit
+gem install weasyprint
 ```
 ### wkhtmltopdf
 
 1. Install by hand (recommended):
 
-    <https://github.com/pdfkit/pdfkit/wiki/Installing-WKHTMLTOPDF>
+    <https://github.com/simplybusiness/weasyprint/wiki/Installing-WKHTMLTOPDF>
 
 2.  Try using the `wkhtmltopdf-binary` gem (mac + linux i386)
 ```
@@ -22,9 +22,9 @@ gem install wkhtmltopdf-binary
 
 ## Usage
 ```ruby
-# PDFKit.new takes the HTML and any options for wkhtmltopdf
+# WeasyPrint.new takes the HTML and any options for wkhtmltopdf
 # run `wkhtmltopdf --extended-help` for a full list of options
-kit = PDFKit.new(html, :page_size => 'Letter')
+kit = WeasyPrint.new(html, :page_size => 'Letter')
 kit.stylesheets << '/path/to/css/file'
 
 # Get an inline PDF
@@ -33,28 +33,28 @@ pdf = kit.to_pdf
 # Save the PDF to a file
 file = kit.to_file('/path/to/save/pdf')
 
-# PDFKit.new can optionally accept a URL or a File.
+# WeasyPrint.new can optionally accept a URL or a File.
 # Stylesheets can not be added when source is provided as a URL of File.
-kit = PDFKit.new('http://google.com')
-kit = PDFKit.new(File.new('/path/to/html'))
+kit = WeasyPrint.new('http://google.com')
+kit = WeasyPrint.new(File.new('/path/to/html'))
 
 # Add any kind of option through meta tags
-PDFKit.new('<html><head><meta name="pdfkit-page_size" content="Letter"')
-PDFKit.new('<html><head><meta name="pdfkit-cookie cookie_name1" content="cookie_value1"')
-PDFKit.new('<html><head><meta name="pdfkit-cookie cookie_name2" content="cookie_value2"')
+WeasyPrint.new('<html><head><meta name="weasyprint-page_size" content="Letter"')
+WeasyPrint.new('<html><head><meta name="weasyprint-cookie cookie_name1" content="cookie_value1"')
+WeasyPrint.new('<html><head><meta name="weasyprint-cookie cookie_name2" content="cookie_value2"')
 ```
 ### Using cookies in scraping
-If you want to pass a cookie to cookie to pdfkit to scrape a website, you can 
+If you want to pass a cookie to cookie to weasyprint to scrape a website, you can 
 pass it in a hash:
 ```ruby
-kit = PDFKit.new(url, cookie: {cookie_name: :cookie_value})
-kit = PDFKit.new(url, [:cookie, :cookie_name1] => :cookie_val1, [:cookie, :cookie_name2] => :cookie_val2)
+kit = WeasyPrint.new(url, cookie: {cookie_name: :cookie_value})
+kit = WeasyPrint.new(url, [:cookie, :cookie_name1] => :cookie_val1, [:cookie, :cookie_name2] => :cookie_val2)
 ```
 ## Configuration
-If you're on Windows or you installed wkhtmltopdf by hand to a location other than `/usr/local/bin` you will need to tell PDFKit where the binary is. You can configure PDFKit like so:
+If you're on Windows or you installed wkhtmltopdf by hand to a location other than `/usr/local/bin` you will need to tell WeasyPrint where the binary is. You can configure WeasyPrint like so:
 ```ruby
-# config/initializers/pdfkit.rb
-PDFKit.configure do |config|
+# config/initializers/weasyprint.rb
+WeasyPrint.configure do |config|
   config.wkhtmltopdf = '/path/to/wkhtmltopdf'
   config.default_options = {
     :page_size => 'Legal',
@@ -66,52 +66,52 @@ PDFKit.configure do |config|
 end
 ```
 ## Middleware
-PDFKit comes with a middleware that allows users to get a PDF view of any page on your site by appending .pdf to the URL.
+WeasyPrint comes with a middleware that allows users to get a PDF view of any page on your site by appending .pdf to the URL.
 
 ### Middleware Setup
 **Non-Rails Rack apps**
 ```ruby
 # in config.ru
-require 'pdfkit'
-use PDFKit::Middleware
+require 'weasyprint'
+use WeasyPrint::Middleware
 ```
 **Rails apps**
 ```ruby
 # in application.rb(Rails3) or environment.rb(Rails2)
-require 'pdfkit'
-config.middleware.use PDFKit::Middleware
+require 'weasyprint'
+config.middleware.use WeasyPrint::Middleware
 ```
-**With PDFKit options**
+**With WeasyPrint options**
 ```ruby
-# options will be passed to PDFKit.new
-config.middleware.use PDFKit::Middleware, :print_media_type => true
+# options will be passed to WeasyPrint.new
+config.middleware.use WeasyPrint::Middleware, :print_media_type => true
 ```
 **With conditions to limit routes that can be generated in pdf**
 ```ruby
 # conditions can be regexps (either one or an array)
-config.middleware.use PDFKit::Middleware, {}, :only => %r[^/public]
-config.middleware.use PDFKit::Middleware, {}, :only => [%r[^/invoice], %r[^/public]]
+config.middleware.use WeasyPrint::Middleware, {}, :only => %r[^/public]
+config.middleware.use WeasyPrint::Middleware, {}, :only => [%r[^/invoice], %r[^/public]]
 
 # conditions can be strings (either one or an array)
-config.middleware.use PDFKit::Middleware, {}, :only => '/public'
-config.middleware.use PDFKit::Middleware, {}, :only => ['/invoice', '/public']
+config.middleware.use WeasyPrint::Middleware, {}, :only => '/public'
+config.middleware.use WeasyPrint::Middleware, {}, :only => ['/invoice', '/public']
 
 # conditions can be regexps (either one or an array)
-config.middleware.use PDFKit::Middleware, {}, :except => [%r[^/prawn], %r[^/secret]]
+config.middleware.use WeasyPrint::Middleware, {}, :except => [%r[^/prawn], %r[^/secret]]
 
 # conditions can be strings (either one or an array)
-config.middleware.use PDFKit::Middleware, {}, :except => ['/secret']
+config.middleware.use WeasyPrint::Middleware, {}, :except => ['/secret']
 ```
 **Saving the generated .pdf to disk**
 
-Setting the `PDFKit-save-pdf` header will cause PDFKit to write the generated .pdf to the file indicated by the value of the header.
+Setting the `WeasyPrint-save-pdf` header will cause WeasyPrint to write the generated .pdf to the file indicated by the value of the header.
 
 For example:
 ```ruby
-headers['PDFKit-save-pdf'] = 'path/to/saved.pdf'
+headers['WeasyPrint-save-pdf'] = 'path/to/saved.pdf'
 ```
 
-Will cause the .pdf to be saved to `path/to/saved.pdf` in addition to being sent back to the client.  If the path is not writable/non-existant the write will fail silently.  The `PDFKit-save-pdf` header is never sent back to the client.
+Will cause the .pdf to be saved to `path/to/saved.pdf` in addition to being sent back to the client.  If the path is not writable/non-existant the write will fail silently.  The `WeasyPrint-save-pdf` header is never sent back to the client.
 
 ## Troubleshooting
 
@@ -139,7 +139,7 @@ Will cause the .pdf to be saved to `path/to/saved.pdf` in addition to being sent
    does not seem to be downloading correctly in the PDF. This is due
    to the fact that wkhtmltopdf does not know where to find those files.
    Make sure you are using absolute paths (start with forward slash) to
-   your resources. If you are using PDFKit to generate PDFs from a raw
+   your resources. If you are using WeasyPrint to generate PDFs from a raw
    HTML source make sure you use complete paths (either file paths or
    urls including the domain). In restrictive server environments the
    root_url configuration may be what you are looking for change your

@@ -1,4 +1,4 @@
-class PDFKit
+class WeasyPrint
 
   class Middleware
 
@@ -19,12 +19,12 @@ class PDFKit
       if rendering_pdf? && headers['Content-Type'] =~ /text\/html|application\/xhtml\+xml/
         body = response.respond_to?(:body) ? response.body : response.join
         body = body.join if body.is_a?(Array)
-        body = PDFKit.new(translate_paths(body, env), @options).to_pdf
+        body = WeasyPrint.new(translate_paths(body, env), @options).to_pdf
         response = [body]
 
-        if headers['PDFKit-save-pdf']
-          File.open(headers['PDFKit-save-pdf'], 'wb') { |file| file.write(body) } rescue nil
-          headers.delete('PDFKit-save-pdf')
+        if headers['WeasyPrint-save-pdf']
+          File.open(headers['WeasyPrint-save-pdf'], 'wb') { |file| file.write(body) } rescue nil
+          headers.delete('WeasyPrint-save-pdf')
         end
 
         unless @caching
@@ -45,7 +45,7 @@ class PDFKit
     # Change relative paths to absolute
     def translate_paths(body, env)
       # Host with protocol
-      root = PDFKit.configuration.root_url || "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/"
+      root = WeasyPrint.configuration.root_url || "#{env['rack.url_scheme']}://#{env['HTTP_HOST']}/"
 
       body.gsub(/(href|src)=(['"])\/([^\/]([^\"']*|[^"']*))['"]/, '\1=\2' + root + '\3\2')
     end
@@ -91,7 +91,7 @@ class PDFKit
       %w[PATH_INFO REQUEST_URI].each { |e| env[e] = path }
 
       env['HTTP_ACCEPT'] = concat(env['HTTP_ACCEPT'], Rack::Mime.mime_type('.html'))
-      env['Rack-Middleware-PDFKit'] = 'true'
+      env['Rack-Middleware-WeasyPrint'] = 'true'
     end
 
     def concat(accepts, type)

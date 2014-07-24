@@ -10,12 +10,12 @@ def mock_app(options = {}, conditions = {}, custom_headers = {})
   }
 
   builder = Rack::Builder.new
-  builder.use PDFKit::Middleware, options, conditions
+  builder.use WeasyPrint::Middleware, options, conditions
   builder.run main_app
   @app = builder.to_app
 end
 
-# describe PDFKit::Middleware do
+# describe WeasyPrint::Middleware do
 #   let(:headers) { {'Content-Type' => "text/html"} }
 
 #   describe "#call" do
@@ -60,7 +60,7 @@ end
 #               specify do
 #                 get 'http://www.example.org/public/test.pdf'
 #                 expect(last_response.headers["Content-Type"]).to eq("application/pdf")
-#                 expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+#                 expect(last_response.body.bytesize).to eq(WeasyPrint.new("Hello world!").to_pdf.bytesize)
 #               end
 #             end
 
@@ -80,7 +80,7 @@ end
 #               specify do
 #                 get 'http://www.example.org/public/test.pdf'
 #                 expect(last_response.headers["Content-Type"]).to eq("application/pdf")
-#                 expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+#                 expect(last_response.body.bytesize).to eq(WeasyPrint.new("Hello world!").to_pdf.bytesize)
 #               end
 #             end
 
@@ -102,7 +102,7 @@ end
 #               specify do
 #                 get 'http://www.example.org/public/test.pdf'
 #                 expect(last_response.headers["Content-Type"]).to eq("application/pdf")
-#                 expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+#                 expect(last_response.body.bytesize).to eq(WeasyPrint.new("Hello world!").to_pdf.bytesize)
 #               end
 #             end
 
@@ -122,7 +122,7 @@ end
 #               specify do
 #                 get 'http://www.example.org/public/test.pdf'
 #                 expect(last_response.headers["Content-Type"]).to eq("application/pdf")
-#                 expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+#                 expect(last_response.body.bytesize).to eq(WeasyPrint.new("Hello world!").to_pdf.bytesize)
 #               end
 #             end
 
@@ -148,7 +148,7 @@ end
 #               specify do
 #                 get 'http://www.example.org/public/test.pdf'
 #                 expect(last_response.headers["Content-Type"]).to eq("application/pdf")
-#                 expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+#                 expect(last_response.body.bytesize).to eq(WeasyPrint.new("Hello world!").to_pdf.bytesize)
 #               end
 #             end
 
@@ -168,7 +168,7 @@ end
 #               specify do
 #                 get 'http://www.example.org/public/test.pdf'
 #                 expect(last_response.headers["Content-Type"]).to eq("application/pdf")
-#                 expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+#                 expect(last_response.body.bytesize).to eq(WeasyPrint.new("Hello world!").to_pdf.bytesize)
 #               end
 #             end
 
@@ -190,7 +190,7 @@ end
 #               specify do
 #                 get 'http://www.example.org/public/test.pdf'
 #                 expect(last_response.headers["Content-Type"]).to eq("application/pdf")
-#                 expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+#                 expect(last_response.body.bytesize).to eq(WeasyPrint.new("Hello world!").to_pdf.bytesize)
 #               end
 #             end
 
@@ -210,7 +210,7 @@ end
 #               specify do
 #                 get 'http://www.example.org/public/test.pdf'
 #                 expect(last_response.headers["Content-Type"]).to eq("application/pdf")
-#                 expect(last_response.body.bytesize).to eq(PDFKit.new("Hello world!").to_pdf.bytesize)
+#                 expect(last_response.body.bytesize).to eq(WeasyPrint.new("Hello world!").to_pdf.bytesize)
 #               end
 #             end
 
@@ -233,16 +233,16 @@ end
 #           expect(File.exists?('spec/test_save.pdf')).to be_false
 # 	end
 
-#         context "when header PDFKit-save-pdf is present" do
+#         context "when header WeasyPrint-save-pdf is present" do
 #           it "should saved the .pdf to disk" do
-# 	    headers = { 'PDFKit-save-pdf' => 'spec/test_save.pdf' }
+# 	    headers = { 'WeasyPrint-save-pdf' => 'spec/test_save.pdf' }
 #             mock_app({}, {only: '/public'}, headers)
 # 	    get 'http://www.example.org/public/test_save.pdf'
 #             expect(File.exists?('spec/test_save.pdf')).to be_true
 # 	  end
 
 #           it "should not raise when target directory does not exist" do
-# 	    headers = { 'PDFKit-save-pdf' => '/this/dir/does/not/exist/spec/test_save.pdf' }
+# 	    headers = { 'WeasyPrint-save-pdf' => '/this/dir/does/not/exist/spec/test_save.pdf' }
 #             mock_app({}, {only: '/public'}, headers)
 #             expect {
 #               get 'http://www.example.com/public/test_save.pdf'
@@ -250,7 +250,7 @@ end
 #           end
 #         end
 
-#         context "when header PDFKit-save-pdf is not present" do
+#         context "when header WeasyPrint-save-pdf is not present" do
 #           it "should not saved the .pdf to disk" do
 #             mock_app({}, {only: '/public'}, {} )
 # 	    get 'http://www.example.org/public/test_save.pdf'
@@ -289,7 +289,7 @@ end
 #           }
 
 #           builder = Rack::Builder.new
-#           builder.use PDFKit::Middleware
+#           builder.use WeasyPrint::Middleware
 #           builder.run main_app
 #           @app = builder.to_app
 #         end
@@ -312,7 +312,7 @@ end
 
 #   describe "#translate_paths" do
 #     before do
-#       @pdf = PDFKit::Middleware.new({})
+#       @pdf = WeasyPrint::Middleware.new({})
 #       @env = { 'REQUEST_URI' => 'http://example.com/document.pdf', 'rack.url_scheme' => 'http', 'HTTP_HOST' => 'example.com' }
 #     end
 
@@ -343,9 +343,9 @@ end
 
 #   describe "#translate_paths with root_url configuration" do
 #     before do
-#       @pdf = PDFKit::Middleware.new({})
+#       @pdf = WeasyPrint::Middleware.new({})
 #       @env = { 'REQUEST_URI' => 'http://example.com/document.pdf', 'rack.url_scheme' => 'http', 'HTTP_HOST' => 'example.com' }
-#       PDFKit.configure do |config|
+#       WeasyPrint.configure do |config|
 #         config.root_url = "http://example.net/"
 #       end
 #     end
@@ -357,7 +357,7 @@ end
 #     end
 
 #     after do
-#       PDFKit.configure do |config|
+#       WeasyPrint.configure do |config|
 #         config.root_url = nil
 #       end
 #     end

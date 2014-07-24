@@ -1,11 +1,11 @@
-class PDFKit
+class WeasyPrint
   class Configuration
     attr_accessor :meta_tag_prefix, :default_options, :root_url
     attr_writer :wkhtmltopdf, :verbose
 
     def initialize
       @verbose         = false
-      @meta_tag_prefix = 'pdfkit-'
+      @meta_tag_prefix = 'weasyprint-'
       @default_options = {
         encoding: 'UTF-8',
         format: 'pdf'
@@ -38,11 +38,11 @@ class PDFKit
     attr_accessor :configuration
   end
 
-  # Configure PDFKit someplace sensible,
-  # like config/initializers/pdfkit.rb
+  # Configure WeasyPrint someplace sensible,
+  # like config/initializers/weasyprint.rb
   #
   # @example
-  #   PDFKit.configure do |config|
+  #   WeasyPrint.configure do |config|
   #     config.wkhtmltopdf = '/usr/bin/wkhtmltopdf'
   #     config.verbose     = true
   #   end
