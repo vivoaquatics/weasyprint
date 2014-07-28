@@ -23,22 +23,22 @@ describe WeasyPrint do
       expect(weasyprint.source.to_s).to eq(file_path)
     end
 
-    # it "should parse the options into a cmd line friedly format" do
-    #   weasyprint = WeasyPrint.new('html', :page_size => 'Letter')
-    #   expect(weasyprint.options).to have_key('--page-size')
-    # end
+    it "should parse the options into a cmd line friedly format" do
+      weasyprint = WeasyPrint.new('html', :resolution => '300')
+      expect(weasyprint.options).to have_key('--resolution')
+    end
 
     it "should parse complex options into a cmd line friedly format" do
       weasyprint = WeasyPrint.new('html', :replace => {'value' => 'something else'} )
       expect(weasyprint.options).to have_key('--replace')
     end
 
-    # it "should provide default options" do
-    #   weasyprint = WeasyPrint.new('<h1>Oh Hai</h1>')
-    #   ['--margin-top', '--margin-right', '--margin-bottom', '--margin-left'].each do |option|
-    #     expect(weasyprint.options).to have_key(option)
-    #   end
-    # end
+    it "should provide default options" do
+      weasyprint = WeasyPrint.new('<h1>Oh Hai</h1>')
+      ['--format'].each do |option|
+        expect(weasyprint.options).to have_key(option)
+      end
+    end
 
     it "should default to 'UTF-8' encoding" do
       weasyprint = WeasyPrint.new('Captación')

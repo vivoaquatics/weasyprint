@@ -1,14 +1,9 @@
 ******************************************************************
 
-Install wkhtmltopdf:
+Install weasyprint:
 
 1. Install by hand (recomended):
 
-        https://github.com/simplybusiness/WeasyPrint/wiki/Installing-WeasyPrint
-
-2. Try using the wkhtmltopdf-binary gem (mac + linux i386)
-
-        gem install wkhtmltopdf-binary
-
+        http://weasyprint.org/docs/install/
 
 ******************************************************************

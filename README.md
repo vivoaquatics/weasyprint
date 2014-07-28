@@ -1,6 +1,6 @@
 # WeasyPrint
 
-Create PDFs using plain old HTML+CSS. Uses [wkhtmltopdf](http://github.com/antialize/wkhtmltopdf) on the back-end which renders HTML using Webkit.
+Create PDFs using plain old HTML+CSS. Uses [weasyprint](http://weasyprint.org/) on the back-end which renders HTML.
 
 ## Install
 
@@ -8,23 +8,17 @@ Create PDFs using plain old HTML+CSS. Uses [wkhtmltopdf](http://github.com/antia
 ```
 gem install weasyprint
 ```
-### wkhtmltopdf
+### weasyprint
 
 1. Install by hand (recommended):
 
-    <https://github.com/simplybusiness/weasyprint/wiki/Installing-WKHTMLTOPDF>
-
-2.  Try using the `wkhtmltopdf-binary` gem (mac + linux i386)
-```
-gem install wkhtmltopdf-binary
-```
-*Note:* The automated installer has been removed.
+    <http://weasyprint.org/docs/install/>
 
 ## Usage
 ```ruby
-# WeasyPrint.new takes the HTML and any options for wkhtmltopdf
-# run `wkhtmltopdf --extended-help` for a full list of options
-kit = WeasyPrint.new(html, :page_size => 'Letter')
+# WeasyPrint.new takes the HTML and any options for weasyprint
+# run `weasyprint --help` for a full list of options
+kit = WeasyPrint.new(html)
 kit.stylesheets << '/path/to/css/file'
 
 # Get an inline PDF
@@ -38,31 +32,17 @@ file = kit.to_file('/path/to/save/pdf')
 kit = WeasyPrint.new('http://google.com')
 kit = WeasyPrint.new(File.new('/path/to/html'))
 
-# Add any kind of option through meta tags
-WeasyPrint.new('<html><head><meta name="weasyprint-page_size" content="Letter"')
-WeasyPrint.new('<html><head><meta name="weasyprint-cookie cookie_name1" content="cookie_value1"')
-WeasyPrint.new('<html><head><meta name="weasyprint-cookie cookie_name2" content="cookie_value2"')
-```
-### Using cookies in scraping
-If you want to pass a cookie to cookie to weasyprint to scrape a website, you can 
-pass it in a hash:
-```ruby
-kit = WeasyPrint.new(url, cookie: {cookie_name: :cookie_value})
-kit = WeasyPrint.new(url, [:cookie, :cookie_name1] => :cookie_val1, [:cookie, :cookie_name2] => :cookie_val2)
-```
 ## Configuration
-If you're on Windows or you installed wkhtmltopdf by hand to a location other than `/usr/local/bin` you will need to tell WeasyPrint where the binary is. You can configure WeasyPrint like so:
+If you're on Windows or you installed weasyprint by hand to a location other than `/usr/local/bin` you will need to tell WeasyPrint where the binary is. You can configure WeasyPrint like so:
 ```ruby
 # config/initializers/weasyprint.rb
 WeasyPrint.configure do |config|
-  config.wkhtmltopdf = '/path/to/wkhtmltopdf'
+  config.weasyprint = '/path/to/weasyprint'
   config.default_options = {
-    :page_size => 'Legal',
-    :print_media_type => true
+    :resolution => '300',
   }
   # Use only if your external hostname is unavailable on the server.
-  config.root_url = "http://localhost"
-  config.verbose = false
+  config.base_url = "http://localhost"
 end
 ```
 ## Middleware
@@ -84,7 +64,7 @@ config.middleware.use WeasyPrint::Middleware
 **With WeasyPrint options**
 ```ruby
 # options will be passed to WeasyPrint.new
-config.middleware.use WeasyPrint::Middleware, :print_media_type => true
+config.middleware.use WeasyPrint::Middleware, :resolution => '300'
 ```
 **With conditions to limit routes that can be generated in pdf**
 ```ruby
@@ -117,7 +97,7 @@ Will cause the .pdf to be saved to `path/to/saved.pdf` in addition to being sent
 
 *  **Single thread issue:** In development environments it is common to run a
    single server process. This can cause issues when rendering your pdf
-   requires wkhtmltopdf to hit your server again (for images, js, css).
+   requires weasyprint to hit your server again (for images, js, css).
    This is because the resource requests will get blocked by the initial
    request and the initial request will be waiting on the resource
    requests causing a deadlock.
@@ -137,7 +117,7 @@ Will cause the .pdf to be saved to `path/to/saved.pdf` in addition to being sent
 
 *  **Resources aren't included in the PDF:** Images, CSS, or JavaScript
    does not seem to be downloading correctly in the PDF. This is due
-   to the fact that wkhtmltopdf does not know where to find those files.
+   to the fact that weasyprint does not know where to find those files.
    Make sure you are using absolute paths (start with forward slash) to
    your resources. If you are using WeasyPrint to generate PDFs from a raw
    HTML source make sure you use complete paths (either file paths or

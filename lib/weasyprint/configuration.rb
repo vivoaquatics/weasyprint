@@ -1,7 +1,7 @@
 class WeasyPrint
   class Configuration
     attr_accessor :meta_tag_prefix, :default_options, :root_url
-    attr_writer :wkhtmltopdf, :verbose
+    attr_writer :weasyprint, :verbose
 
     def initialize
       @verbose         = false
@@ -10,19 +10,10 @@ class WeasyPrint
         encoding: 'UTF-8',
         format: 'pdf'
       }
-      # @default_options = {
-      #   :disable_smart_shrinking => false,
-      #   :quiet => true,
-      #   :page_size => 'Letter',
-      #   :margin_top => '0.75in',
-      #   :margin_right => '0.75in',
-      #   :margin_bottom => '0.75in',
-      #   :margin_left => '0.75in',
-      # }
     end
 
-    def wkhtmltopdf
-      @wkhtmltopdf ||= (defined?(Bundler::GemfileError) ? `bundle exec which weasyprint` : `which weasyprint`).chomp
+    def weasyprint
+      @weasyprint ||= (defined?(Bundler::GemfileError) ? `bundle exec which weasyprint` : `which weasyprint`).chomp
     end
 
     def quiet?
@@ -43,8 +34,7 @@ class WeasyPrint
   #
   # @example
   #   WeasyPrint.configure do |config|
-  #     config.wkhtmltopdf = '/usr/bin/wkhtmltopdf'
-  #     config.verbose     = true
+  #     config.weasyprint = '/usr/bin/weasyprint'
   #   end
 
   def self.configuration
