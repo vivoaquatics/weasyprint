@@ -42,7 +42,7 @@ class WeasyPrint
 
     args << (path || '-') # Write to file or stdout
 
-    args.shelljoin.tap { |comm| puts ">>> " + comm }
+    args.shelljoin
   end
 
   def executable
