@@ -4,8 +4,8 @@ class WeasyPrint
 
   class NoExecutableError < StandardError
     def initialize
-      msg  = "No wkhtmltopdf executable found at #{WeasyPrint.configuration.wkhtmltopdf}\n"
-      msg << ">> Please install wkhtmltopdf - https://github.com/weasyprint/WeasyPrint/wiki/Installing-WKHTMLTOPDF"
+      msg  = "No weasyprint executable found at #{WeasyPrint.configuration.weasyprint}\n"
+      msg << ">> Please install weasyprint - http://weasyprint.org/docs/install/"
       super(msg)
     end
   end
@@ -27,7 +27,7 @@ class WeasyPrint
     @options = WeasyPrint.configuration.default_options.merge(options)
     @options = normalize_options(@options)
 
-    raise NoExecutableError.new unless File.exists?(WeasyPrint.configuration.wkhtmltopdf)
+    raise NoExecutableError.new unless File.exists?(WeasyPrint.configuration.weasyprint)
   end
 
   def command(path = nil)
@@ -46,7 +46,7 @@ class WeasyPrint
   end
 
   def executable
-    default = WeasyPrint.configuration.wkhtmltopdf
+    default = WeasyPrint.configuration.weasyprint
     return default if default !~ /^\// # its not a path, so nothing we can do
     if File.exist?(default)
       default
@@ -79,9 +79,7 @@ class WeasyPrint
 
   protected
 
-    # Pulled from:
-    # https://github.com/wkhtmltopdf/wkhtmltopdf/blob/ebf9b6cfc4c58a31349fb94c568b254fac37b3d3/README_WKHTMLTOIMAGE#L27
-    REPEATABLE_OPTIONS = %w[--allow --cookie --custom-header --post --post-file --run-script]
+    REPEATABLE_OPTIONS = %w[]
 
     def style_tag_for(stylesheet)
       "<style>#{File.read(stylesheet)}</style>"
@@ -105,7 +103,7 @@ class WeasyPrint
       options.each do |key, value|
         next if !value
 
-        # The actual option for wkhtmltopdf
+        # The actual option for weasyprint
         normalized_key = "--#{normalize_arg key}"
 
         # If the option is repeatable, attempt to normalize all values

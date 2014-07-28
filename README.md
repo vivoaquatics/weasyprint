@@ -115,19 +115,6 @@ Will cause the .pdf to be saved to `path/to/saved.pdf` in addition to being sent
    
    Then to run the app `unicorn_rails -c config/unicorn.conf` (from rails_root)
 
-*  **Resources aren't included in the PDF:** Images, CSS, or JavaScript
-   does not seem to be downloading correctly in the PDF. This is due
-   to the fact that weasyprint does not know where to find those files.
-   Make sure you are using absolute paths (start with forward slash) to
-   your resources. If you are using WeasyPrint to generate PDFs from a raw
-   HTML source make sure you use complete paths (either file paths or
-   urls including the domain). In restrictive server environments the
-   root_url configuration may be what you are looking for change your
-   asset host.
-
-*  **Mangled output in the browser:** Be sure that your HTTP response
-   headers specify "Content-Type: application/pdf" 
-
 ## Note on Patches/Pull Requests
 
 * Fork the project.
@@ -136,9 +123,9 @@ Will cause the .pdf to be saved to `path/to/saved.pdf` in addition to being sent
 * Add tests for it. This is important so I don't break it in a
   future version unintentionally.
 * Commit, do not mess with rakefile, version, or history.
-  (if you want to have your own version, that is fine but bump version in a commit by itself I can ignore when I pull)
-* Send me a pull request. Bonus points for topic branches.
+  (if you want to have your own version, that is fine but bump version in a commit by itself so we can ignore when we pull)
+* Send a pull request. Bonus points for topic branches.
 
 ## Copyright
 
-Copyright (c) 2010 Jared Pace. See LICENSE for details.
+Copyright (c) 2010 Jared Pace. See LICENSE for details. Additional work Copyright (c) 2014 Simply Business
