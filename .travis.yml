@@ -5,4 +5,4 @@ rvm:
 
 before_script:
   - "sudo apt-get install python-dev python-pip python-lxml libcairo2 libpango1.0-0 libgdk-pixbuf2.0-0 libffi-dev shared-mime-info"
-  - "pip install weasyprint"
+  - "sudo pip install weasyprint"
