@@ -65,10 +65,13 @@ class WeasyPrint
       pdf.close_write
       pdf.gets(nil)
     end
+
     result = File.read(path) if path
 
     # $? is thread safe per http://stackoverflow.com/questions/2164887/thread-safe-external-process-in-ruby-plus-checking-exitstatus
-    raise "command failed (exitstatus=#{$?.exitstatus}): #{invoke}" if result.to_s.strip.empty? or !successful?($?)
+    if result.to_s.force_encoding("ISO-8859-1").encode("UTF-8").strip.empty? || !successful?($?)
+      raise "command failed (exitstatus=#{$?.exitstatus}): #{invoke}"
+    end
     return result
   end
 
