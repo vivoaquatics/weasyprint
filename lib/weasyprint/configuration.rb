@@ -8,6 +8,7 @@ class WeasyPrint
       @meta_tag_prefix = 'weasyprint-'
       @default_options = {
         encoding: 'UTF-8',
+        timeout: 90
       }
     end
 
